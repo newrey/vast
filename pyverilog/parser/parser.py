@@ -143,8 +143,8 @@ class VerilogParser(object):
         p[0] = ()
 
     def p_params(self, p):
-        'params : params COMMA param'
-        p[0] = p[1] + (p[3],)
+        'params : params param'
+        p[0] = p[1] + (p[2],)
         p.set_lineno(0, p.lineno(1))
 
     def p_params_one(self, p):
@@ -153,6 +153,16 @@ class VerilogParser(object):
         p.set_lineno(0, p.lineno(1))
 
     def p_param(self, p):
+        'param : PARAMETER var_sigtype_or_empty sign_sigtype_or_empty width_or_empty param_substitution_list COMMA'
+        sigtypes = None if p[2] == () else p[2]
+        signed = None if p[3] == () else p[3]
+        width = None if p[4] == () else p[4]
+        paramlist = [Parameter(rname, rvalue, width, signed=signed, sigtypes=sigtypes, lineno=p.lineno(1))
+                     for rname, rvalue in p[5]]
+        p[0] = DeclParameters(tuple(paramlist), lineno=p.lineno(1))
+        p.set_lineno(0, p.lineno(1))
+
+    def p_param_one(self, p):
         'param : PARAMETER var_sigtype_or_empty sign_sigtype_or_empty width_or_empty param_substitution_list'
         sigtypes = None if p[2] == () else p[2]
         signed = None if p[3] == () else p[3]

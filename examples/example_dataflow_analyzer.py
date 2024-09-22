@@ -53,7 +53,7 @@ def main():
                                        nobind=options.nobind,
                                        preprocess_include=options.include,
                                        preprocess_define=options.define)
-    analyzer.generate()
+    analyzer.generate(debug=True)
 
     directives = analyzer.get_directives()
     print('Directive:')

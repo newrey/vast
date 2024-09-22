@@ -36,8 +36,8 @@ class VerilogDataflowAnalyzer(VerilogCodeParser):
         self.noreorder = noreorder
         self.nobind = nobind
 
-    def generate(self):
-        ast = self.parse()
+    def generate(self, debug=False):
+        ast = self.parse(debug)
 
         module_visitor = ModuleVisitor()
         module_visitor.visit(ast)
